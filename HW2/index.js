@@ -93,7 +93,30 @@ const renderTableHead = () => {
 };
 
 const renderTableBody = () => {
-
+    const { sortBy, sortOrder, products } = state;
+    const tableBody = $('#tableBody')
+    const sortedProducts = sortOrder === 'ASC' ? 
+        _.sortBy(products, sortBy.toLowerCase()) : 
+        _.sortBy(products, sortBy.toLowerCase()).reverse();
+    $(tableBody).empty();
+    sortedProducts.forEach((product) => {
+        $('<tr>').append(
+            $('<td>').append(
+                $('<a>', { href: '#' })
+                    .text(product.name)
+                    .click(editHandler),
+            ),
+            $('<td>').text(Number(product.price).toLocaleString('en-US', { style: 'currency', currency: 'USD' })),
+            $('<td>').append(
+                $('<button>', { class: "btn btn-primary" })
+                    .text('Edit')
+                    .click(editHandler),
+                $('<button>', { class: "btn btn-primary" })
+                    .text('Delete')
+                    .click(deleteHandler),
+            ),
+        ).appendTo(tableBody);
+    })
 };
 
 const render = () => {
