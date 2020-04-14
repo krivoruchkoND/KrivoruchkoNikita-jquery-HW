@@ -1,12 +1,27 @@
 const state = {
-    products: [
-        { name: 'Product 1', count: 5, price: 1234.56 },
-        { name: 'Product 2', count: 10, price: 7.91 },
-        { name: 'Product 3', count: 7, price: 77.88 },
-    ],
+    products: [],
     sortBy: 'NAME', //PRICE
     sortOrder: 'DESC', //ASC
 };
+
+(() => {
+    const url = 'https://api.jsonbin.io/b/5e962adc5fa47104cea07c45/1';
+    const key = '$2b$10$ltjATMhqY0JfYN5Mi1k1nOVTEQIGJwabv1R6Fb9CUjOUl7jTe6PwG';
+    $.ajax({
+        type: 'GET',
+        headers: {
+            'secret-key': key,
+        },
+        url,
+    })
+    .then((response) => {
+        state.products = response;
+    })
+    .catch(() => {
+        alert('Error while JSON loading');
+    })
+    .then(() => render());
+})();
 
 const toggleSortBy = () => {
     const { sortBy } = state;
@@ -67,14 +82,7 @@ const renderTableHead = () => {
     );
     sortBy === 'NAME' ? nameEl.append(sortIcontEl) : priceEl.append(sortIcontEl);
 
-    const actionsEl = $('<th>').append(
-        $('<button>', { class: "btn btn-primary" })
-            .text('Edit')
-            .click(editHandler),
-        $('<button>', { class: "btn btn-primary" })
-            .text('Delete')
-            .click(deleteHandler),
-    );
+    const actionsEl = $('<th>').text('Actions');
 
     $(tableHead).empty();
     $('<tr>').append(
@@ -85,7 +93,7 @@ const renderTableHead = () => {
 };
 
 const renderTableBody = () => {
-    
+
 };
 
 const render = () => {
@@ -93,4 +101,4 @@ const render = () => {
     renderTableBody();
 };
 
-render();
+
