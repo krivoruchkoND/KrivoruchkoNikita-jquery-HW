@@ -1,1 +1,17 @@
-@import "./bootstrap.css"
+@import "./bootstrap.css";
+
+.up-arrow {
+    height: 0px;
+	width: 0px;
+	border-color: black transparent;
+	border-style: solid;
+	border-width: 0px 20px 20px 20px;
+}
+
+.down-arrow {
+    height: 0px;
+	width: 0px;
+	border-color: black transparent;
+	border-style: solid;
+	border-width: 20px 20px 0px 20px;
+}
