@@ -1,17 +1,21 @@
 @import "./bootstrap.css";
 
-.up-arrow {
+.up-arrow::after {
+	display: block;
+	content: ' ';
     height: 0px;
 	width: 0px;
 	border-color: black transparent;
 	border-style: solid;
-	border-width: 0px 20px 20px 20px;
+	border-width: 0px 10px 15px 10px;
 }
 
-.down-arrow {
+.down-arrow::after {
+	display: block;
+	content: ' ';
     height: 0px;
 	width: 0px;
 	border-color: black transparent;
 	border-style: solid;
-	border-width: 20px 20px 0px 20px;
+	border-width: 15px 10px 0px 10px;
 }
