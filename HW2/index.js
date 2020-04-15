@@ -67,22 +67,20 @@ const renderTableHead = () => {
     const { sortBy, sortOrder } = state;
 
     const sortIcon = sortOrder === 'ASC' ? 'up-arrow' : 'down-arrow';
-    const sortIcontEl = $('<div>', { class: sortIcon });
 
     const nameEl = $('<th>').append(
-        $('<a>', { href: '#' })
+        $('<a>', { href: '#', class: `d-flex justify-content-between align-items-center ${sortBy === 'NAME' ? sortIcon : ''}` })
             .text('Name')
             .click({ type: 'NAME' }, toggleSort)
     );
 
     const priceEl = $('<th>').append(
-        $('<a>', { href: '#' })
+        $('<a>', { href: '#', class: `d-flex justify-content-between align-items-center ${sortBy === 'PRICE' ? sortIcon : ''}` })
             .text('Price')
             .click({ type: 'PRICE' }, toggleSort)
     );
-    sortBy === 'NAME' ? nameEl.append(sortIcontEl) : priceEl.append(sortIcontEl);
 
-    const actionsEl = $('<th>').text('Actions');
+    const actionsEl = $('<th>', { class: 'pl-4' }).text('Actions');
 
     $(tableHead).empty();
     $('<tr>').append(
@@ -95,23 +93,26 @@ const renderTableHead = () => {
 const renderTableBody = () => {
     const { sortBy, sortOrder, products } = state;
     const tableBody = $('#tableBody')
+    // for some reason _.orderBy is not a function
     const sortedProducts = sortOrder === 'ASC' ? 
         _.sortBy(products, sortBy.toLowerCase()) : 
         _.sortBy(products, sortBy.toLowerCase()).reverse();
     $(tableBody).empty();
     sortedProducts.forEach((product) => {
         $('<tr>').append(
-            $('<td>').append(
+            $('<td>', { class: 'align-middle' }).append(
                 $('<a>', { href: '#' })
                     .text(product.name)
                     .click(editHandler),
             ),
-            $('<td>').text(Number(product.price).toLocaleString('en-US', { style: 'currency', currency: 'USD' })),
+            $('<td>', { class: 'align-middle' })
+                .text(Number(product.price)
+                    .toLocaleString('en-US', { style: 'currency', currency: 'USD' })),
             $('<td>').append(
-                $('<button>', { class: "btn btn-primary" })
+                $('<button>', { class: "btn btn-primary mr-2 ml-2" })
                     .text('Edit')
                     .click(editHandler),
-                $('<button>', { class: "btn btn-primary" })
+                $('<button>', { class: "btn btn-primary mr-2 ml-2" })
                     .text('Delete')
                     .click(deleteHandler),
             ),
