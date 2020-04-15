@@ -4,8 +4,8 @@ const state = {
     sortOrder: 'DESC', //ASC
 };
 
-(() => {
-    const url = 'https://api.jsonbin.io/b/5e962adc5fa47104cea07c45/1';
+(loadData = () => {
+    const url = 'https://api.jsonbin.io/b/5e962adc5fa47104cea07c45/2';
     const key = '$2b$10$ltjATMhqY0JfYN5Mi1k1nOVTEQIGJwabv1R6Fb9CUjOUl7jTe6PwG';
     $.ajax({
         type: 'GET',
@@ -20,7 +20,16 @@ const state = {
     .catch(() => {
         alert('Error while JSON loading');
     })
-    .then(() => render());
+    .then(() => {
+        render();
+    })
+    .catch(() => {
+        alert('Error while render');
+    });
+})();
+
+(inputsInit = () => {
+
 })();
 
 const toggleSortBy = () => {
@@ -58,7 +67,7 @@ const editHandler = () => {
 
 };
 
-const deleteHandler = () => {
+const deleteHandler = (e) => {
 
 };
 
@@ -101,9 +110,13 @@ const renderTableBody = () => {
     sortedProducts.forEach((product) => {
         $('<tr>').append(
             $('<td>', { class: 'align-middle' }).append(
-                $('<a>', { href: '#' })
-                    .text(product.name)
-                    .click(editHandler),
+                $('<div>', { class: 'd-flex justify-content-between' }).append(
+                    $('<a>', { href: '#' })
+                        .text(product.name)
+                        .click(editHandler),
+                    $('<span>', { class: 'product-count' })
+                        .text(product.count),
+                )
             ),
             $('<td>', { class: 'align-middle' })
                 .text(Number(product.price)
@@ -124,5 +137,3 @@ const render = () => {
     renderTableHead();
     renderTableBody();
 };
-
-
