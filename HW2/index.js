@@ -3,6 +3,7 @@ const state = {
     sortBy: 'NAME',     // PRICE
     sortOrder: 'DESC',  // ASC
     status: 'SORTING',  // EDITING, DELETING
+    search: '',
 };
 
 (loadData = () => {
@@ -60,11 +61,7 @@ const searchHandler = () => {
 
 };
 
-const addNewHandler = () => {
-
-};
-
-const editHandler = () => {
+const editHandler = (e) => {
     state.status = "EDITING"
     const { id } = e.data;
     render(id);
@@ -105,12 +102,22 @@ const renderTableHead = () => {
 };
 
 const renderTableBody = () => {
-    const { sortBy, sortOrder, products } = state;
+    const { sortBy, sortOrder, products, search } = state;
     const tableBody = $('#tableBody')
+    const searchStr = search.trim().toLowerCase();
+    let searchedProducts = [];
+    if (!searchStr == '') {
+        searchedProducts = products.filter((product) => {
+            const name = product.name.trim().toLowerCase();
+            return name.startsWith(searchStr);
+        })
+    } else {
+        searchedProducts = products;
+    }
     // for some reason _.orderBy is not a function
     const sortedProducts = sortOrder === 'ASC' ? 
-        _.sortBy(products, sortBy.toLowerCase()) : 
-        _.sortBy(products, sortBy.toLowerCase()).reverse();
+        _.sortBy(searchedProducts, sortBy.toLowerCase()) : 
+        _.sortBy(searchedProducts, sortBy.toLowerCase()).reverse();
     $(tableBody).empty();
     sortedProducts.forEach((product) => {
         $('<tr>').append(
@@ -139,10 +146,21 @@ const renderTableBody = () => {
 };
 
 const renderDeleteModal = (id) => {
+    const { products } = state;
+    $('#backdrop').removeClass('d-none');
+    $('#deleteModal').show();
+    const product = _.find(products, { id });
+    $('#deletingProductName').text(product.name);
 
 };
 
 const renderEditModal = (id) => {
+    const { products } = state;
+    $('#backdrop').removeClass('d-none');
+    $('#editModal').show();
+    const product = _.find(products, { id });
+    const headerText = product ? product.name : 'New product';
+    $('#editingProductName').text(headerText);
 
 };
 
