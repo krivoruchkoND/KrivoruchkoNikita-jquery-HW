@@ -1,7 +1,8 @@
 const state = {
     products: [],
-    sortBy: 'NAME', //PRICE
-    sortOrder: 'DESC', //ASC
+    sortBy: 'NAME',     // PRICE
+    sortOrder: 'DESC',  // ASC
+    status: 'SORTING',  // EDITING, DELETING
 };
 
 (loadData = () => {
@@ -42,7 +43,7 @@ const toggleSortOrder = () => {
     state.sortOrder = sortOrder === 'DESC' ? 'ASC' : 'DESC';
 };
 
-const toggleSort = (event) => {
+const sortHandler = (event) => {
     const { type } = event.data;
     const { sortBy } = state;
 
@@ -64,11 +65,15 @@ const addNewHandler = () => {
 };
 
 const editHandler = () => {
-
+    state.status = "EDITING"
+    const { id } = e.data;
+    render(id);
 };
 
 const deleteHandler = (e) => {
-
+    state.status = "DELETING"
+    const { id } = e.data;
+    render(id);
 };
 
 const renderTableHead = () => {
@@ -80,13 +85,13 @@ const renderTableHead = () => {
     const nameEl = $('<th>').append(
         $('<a>', { href: '#', class: `d-flex justify-content-between align-items-center ${sortBy === 'NAME' ? sortIcon : ''}` })
             .text('Name')
-            .click({ type: 'NAME' }, toggleSort)
+            .click({ type: 'NAME' }, sortHandler)
     );
 
     const priceEl = $('<th>').append(
         $('<a>', { href: '#', class: `d-flex justify-content-between align-items-center ${sortBy === 'PRICE' ? sortIcon : ''}` })
             .text('Price')
-            .click({ type: 'PRICE' }, toggleSort)
+            .click({ type: 'PRICE' }, sortHandler)
     );
 
     const actionsEl = $('<th>', { class: 'pl-4' }).text('Actions');
@@ -124,16 +129,41 @@ const renderTableBody = () => {
             $('<td>').append(
                 $('<button>', { class: "btn btn-primary mr-2 ml-2" })
                     .text('Edit')
-                    .click(editHandler),
+                    .click({ id: product.id }, editHandler),
                 $('<button>', { class: "btn btn-primary mr-2 ml-2" })
                     .text('Delete')
-                    .click(deleteHandler),
+                    .click({ id: product.id }, deleteHandler),
             ),
         ).appendTo(tableBody);
     })
 };
 
-const render = () => {
-    renderTableHead();
-    renderTableBody();
+const renderDeleteModal = (id) => {
+
+};
+
+const renderEditModal = (id) => {
+
+};
+
+const render = (id) => {
+    switch(state.status) {
+        case 'SORTING': {
+            renderTableHead();
+            renderTableBody();
+            break;
+        }
+        case 'EDITING': {
+            renderEditModal(id);
+            break;
+        }
+        case 'DELETING': {
+            renderDeleteModal(id);
+            break;
+        }
+        default: {
+            alert('Unknown status');
+            break;
+        }
+    }
 };
