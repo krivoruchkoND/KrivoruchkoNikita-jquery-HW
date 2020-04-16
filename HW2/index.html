@@ -6,6 +6,7 @@
     <title>jQuery-table</title>
 </head>
 <body>
+    <!-- Поле поиска, кнопка добавления и таблица с продуктами -->
     <div class="container">
         <div class="row d-flex justify-content-center">
             <input type="text" class="form-control col-md-7 mr-2 ml-2 mb-2 mt-2" id="searchRequest">
@@ -21,6 +22,25 @@
             </tbody>
         </table>
     </div>
+    <!-- Модальное окно удаления продукта -->
+    <div class="modal">        
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Are you sure?</h5>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure want to delete <span id="deletingProductName"></span>?</p>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" value="Yes" class="btn btn-primary">
+                    <input type="button" value="No" class="btn btn-secondary">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Темный фон для модальных окон -->
+    <div id='backdrop' class="modal-backdrop d-none opacity-05"></div>
 
     <script src="./jquery.js"></script>
     <script src="./lodash.js"></script>
