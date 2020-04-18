@@ -31,3 +31,8 @@
 .opacity-05 {
 	opacity: 0.5;
 }
+
+.centered {
+	top: 50%;
+	right: 50%;
+}

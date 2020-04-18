@@ -38,10 +38,6 @@ const state = {
     });
 })();
 
-(inputsInit = () => {
-
-})();
-
 // Смена поля сортировки
 const toggleSortBy = () => {
     const { sortBy } = state;
@@ -205,6 +201,7 @@ const render = (product) => {
     $('#backdrop').hide();
     $('#deleteModal').hide();
     $('#editModal').hide();
+    $('#loading').hide();
 
     switch(state.status) {
         case 'SORTING': {
