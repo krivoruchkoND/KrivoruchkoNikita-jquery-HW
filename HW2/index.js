@@ -76,15 +76,24 @@ const searchHandler = () => {
 // Обработка изменения/добавления товара
 const editHandler = (e) => {
     state.status = "EDITING"
-    const { id } = e.data;
-    render(id);
+    const { product } = e.data;
+    render(product);
 };
 
 // Обработка удаления товара
 const deleteHandler = (e) => {
     state.status = "DELETING"
-    const { id } = e.data;
-    render(id);
+    const { product } = e.data;
+    render(product);
+};
+
+// Удаление товара
+const deleteProduct = (e) => {
+    const { products } = state;
+    const { toggleDeletion, product } = e.data;
+    toggleDeletion === 'YES' ? _.remove(products, product) : null;
+    state.status = 'SORTING';
+    render();
 };
 
 // Отрисовка шапки таблицы
@@ -136,9 +145,7 @@ const renderTableBody = () => {
         searchedProducts = products;
     }
     // Отсортированные товары
-    const sortedProducts = sortOrder === 'ASC' ? 
-        _.sortBy(searchedProducts, sortBy.toLowerCase()) : 
-        _.sortBy(searchedProducts, sortBy.toLowerCase()).reverse();
+    const sortedProducts = _.orderBy(searchedProducts, sortBy.toLowerCase(), sortOrder.toLowerCase())
     // Чистим старое, добавляем новое
     $(tableBody).empty();
     sortedProducts.forEach((product) => {
@@ -161,35 +168,32 @@ const renderTableBody = () => {
             $('<td>').append(
                 $('<button>', { class: "btn btn-primary mr-2 ml-2" })
                     .text('Edit')
-                    .click({ id: product.id }, editHandler),
+                    .click({ product }, editHandler),
                 $('<button>', { class: "btn btn-primary mr-2 ml-2" })
                     .text('Delete')
-                    .click({ id: product.id }, deleteHandler),
+                    .click({ product }, deleteHandler),
             ),
         ).appendTo(tableBody);
     })
 };
 
 // Отрисовка модального окна удаления товара
-const renderDeleteModal = (id) => {
-    const { products } = state;
+const renderDeleteModal = (product) => {
     // Показываем модальное окно и бекдроп
-    $('#backdrop').removeClass('d-none');
+    $('#backdrop').show();
     $('#deleteModal').show();
     // Находим удалаемый товар 
-    const product = _.find(products, { id });
     $('#deletingProductName').text(product.name);
-
+    $('#deleteYesButton').click({ toggleDeletion: 'YES', product }, deleteProduct);
+    $('#deleteNoButton').click({ toggleDeletion: 'NO' }, deleteProduct);
 };
 
 // Отрисовка модального окна изменения/добавления товара
-const renderEditModal = (id) => {
-    const { products } = state;
+const renderEditModal = (product) => {
     // Показываем модальное окно и бекдроп
-    $('#backdrop').removeClass('d-none');
+    $('#backdrop').show();
     $('#editModal').show();
     // Находим изменяемый товар
-    const product = _.find(products, { id });
     // Если его нет, значит это будет новый товар
     const headerText = product ? product.name : 'New product';
     $('#editingProductName').text(headerText);
@@ -197,7 +201,11 @@ const renderEditModal = (id) => {
 };
 
 // Отрисовка приложения в зависимости от статуса
-const render = (id) => {
+const render = (product) => {
+    $('#backdrop').hide();
+    $('#deleteModal').hide();
+    $('#editModal').hide();
+
     switch(state.status) {
         case 'SORTING': {
             renderTableHead();
@@ -205,11 +213,11 @@ const render = (id) => {
             break;
         }
         case 'EDITING': {
-            renderEditModal(id);
+            renderEditModal(product);
             break;
         }
         case 'DELETING': {
-            renderDeleteModal(id);
+            renderDeleteModal(product);
             break;
         }
         default: {
