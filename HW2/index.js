@@ -171,7 +171,7 @@ class App {
                     $('<button>', { class: "btn btn-primary mr-2 ml-2" })
                         .text('Edit')
                         .click({ product }, this.editHandler),
-                    $('<button>', { class: "btn btn-primary mr-2 ml-2" })
+                    $('<button>', { class: "btn btn-secondary mr-2 ml-2" })
                         .text('Delete')
                         .click({ product }, this.deleteHandler),
                 ),
