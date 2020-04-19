@@ -18,7 +18,7 @@ class App {
 
     // ajax запрос списка товаров
     loadData() {
-        const url = 'https://api.jsonbin.io/b/5e962adc5fa47104cea07c45/3';
+        const url = 'https://api.jsonbin.io/b/5e962adc5fa47104cea07c45/4';
         const key = '$2b$10$ltjATMhqY0JfYN5Mi1k1nOVTEQIGJwabv1R6Fb9CUjOUl7jTe6PwG';
         $.ajax({
             type: 'GET',

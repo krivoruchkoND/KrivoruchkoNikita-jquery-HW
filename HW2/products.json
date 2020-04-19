@@ -1,330 +1,600 @@
 [
   {
     "id": 1,
-    "name": "in consectetur elit",
-    "email": "tempor@apexia.biz",
-    "count": 97,
-    "price": "919.81",
+    "name": "ea nostrud proident",
+    "email": "fugiat@gallaxia.name",
+    "count": 83,
+    "price": "375.55",
     "delivery": [
       {
         "country": "Russia",
         "cities": [
-          "Moskow",
-          "Novosibirsk",
-          "Krasnoyarsk"
+          {
+            "name": "Moskow",
+            "selected": false
+          },
+          {
+            "name": "Novosibirsk",
+            "selected": false
+          },
+          {
+            "name": "Krasnoyarsk",
+            "selected": false
+          }
         ]
       },
       {
         "country": "USA",
         "cities": [
-          "New-York",
-          "Houston",
-          "San Francisco"
+          {
+            "name": "New-York",
+            "selected": true
+          },
+          {
+            "name": "Houston",
+            "selected": true
+          },
+          {
+            "name": "San Francisco",
+            "selected": true
+          }
         ]
       },
       {
         "country": "Belarus",
         "cities": [
-          "Minsk",
-          "Homyel",
-          "Mahilyow"
+          {
+            "name": "Minsk",
+            "selected": false
+          },
+          {
+            "name": "Homyel",
+            "selected": false
+          },
+          {
+            "name": "Mahilyow",
+            "selected": true
+          }
         ]
       }
     ]
   },
   {
     "id": 2,
-    "name": "non amet eiusmod",
-    "email": "aute@acrodance.biz",
-    "count": 30,
-    "price": "494.69",
+    "name": "labore ipsum",
+    "email": "eu@decratex.biz",
+    "count": 45,
+    "price": "565.06",
     "delivery": [
       {
         "country": "Russia",
         "cities": [
-          "Moskow",
-          "Novosibirsk",
-          "Krasnoyarsk"
+          {
+            "name": "Moskow",
+            "selected": false
+          },
+          {
+            "name": "Novosibirsk",
+            "selected": false
+          },
+          {
+            "name": "Krasnoyarsk",
+            "selected": true
+          }
         ]
       },
       {
         "country": "USA",
         "cities": [
-          "New-York",
-          "Houston",
-          "San Francisco"
+          {
+            "name": "New-York",
+            "selected": true
+          },
+          {
+            "name": "Houston",
+            "selected": false
+          },
+          {
+            "name": "San Francisco",
+            "selected": false
+          }
         ]
       },
       {
         "country": "Belarus",
         "cities": [
-          "Minsk",
-          "Homyel",
-          "Mahilyow"
+          {
+            "name": "Minsk",
+            "selected": true
+          },
+          {
+            "name": "Homyel",
+            "selected": true
+          },
+          {
+            "name": "Mahilyow",
+            "selected": true
+          }
         ]
       }
     ]
   },
   {
     "id": 3,
-    "name": "ex",
-    "email": "eu@eclipto.info",
-    "count": 73,
-    "price": 803,
+    "name": "quis Lorem commodo",
+    "email": "tempor@cowtown.us",
+    "count": 77,
+    "price": "764.34",
     "delivery": [
       {
         "country": "Russia",
         "cities": [
-          "Moskow",
-          "Novosibirsk",
-          "Krasnoyarsk"
+          {
+            "name": "Moskow",
+            "selected": true
+          },
+          {
+            "name": "Novosibirsk",
+            "selected": true
+          },
+          {
+            "name": "Krasnoyarsk",
+            "selected": false
+          }
         ]
       },
       {
         "country": "USA",
         "cities": [
-          "New-York",
-          "Houston",
-          "San Francisco"
+          {
+            "name": "New-York",
+            "selected": true
+          },
+          {
+            "name": "Houston",
+            "selected": false
+          },
+          {
+            "name": "San Francisco",
+            "selected": false
+          }
         ]
       },
       {
         "country": "Belarus",
         "cities": [
-          "Minsk",
-          "Homyel",
-          "Mahilyow"
+          {
+            "name": "Minsk",
+            "selected": true
+          },
+          {
+            "name": "Homyel",
+            "selected": false
+          },
+          {
+            "name": "Mahilyow",
+            "selected": false
+          }
         ]
       }
     ]
   },
   {
     "id": 4,
-    "name": "incididunt aliquip adipisicing",
-    "email": "qui@opticall.org",
-    "count": 98,
-    "price": "159.95",
+    "name": "incididunt",
+    "email": "adipisicing@maroptic.ca",
+    "count": 77,
+    "price": "100.46",
     "delivery": [
       {
         "country": "Russia",
         "cities": [
-          "Moskow",
-          "Novosibirsk",
-          "Krasnoyarsk"
+          {
+            "name": "Moskow",
+            "selected": false
+          },
+          {
+            "name": "Novosibirsk",
+            "selected": true
+          },
+          {
+            "name": "Krasnoyarsk",
+            "selected": false
+          }
         ]
       },
       {
         "country": "USA",
         "cities": [
-          "New-York",
-          "Houston",
-          "San Francisco"
+          {
+            "name": "New-York",
+            "selected": true
+          },
+          {
+            "name": "Houston",
+            "selected": true
+          },
+          {
+            "name": "San Francisco",
+            "selected": true
+          }
         ]
       },
       {
         "country": "Belarus",
         "cities": [
-          "Minsk",
-          "Homyel",
-          "Mahilyow"
+          {
+            "name": "Minsk",
+            "selected": false
+          },
+          {
+            "name": "Homyel",
+            "selected": false
+          },
+          {
+            "name": "Mahilyow",
+            "selected": true
+          }
         ]
       }
     ]
   },
   {
     "id": 5,
-    "name": "non consequat",
-    "email": "exercitation@grainspot.name",
-    "count": 41,
-    "price": "677.13",
+    "name": "ut deserunt dolor",
+    "email": "labore@flotonic.info",
+    "count": 79,
+    "price": "844.91",
     "delivery": [
       {
         "country": "Russia",
         "cities": [
-          "Moskow",
-          "Novosibirsk",
-          "Krasnoyarsk"
+          {
+            "name": "Moskow",
+            "selected": true
+          },
+          {
+            "name": "Novosibirsk",
+            "selected": false
+          },
+          {
+            "name": "Krasnoyarsk",
+            "selected": false
+          }
         ]
       },
       {
         "country": "USA",
         "cities": [
-          "New-York",
-          "Houston",
-          "San Francisco"
+          {
+            "name": "New-York",
+            "selected": false
+          },
+          {
+            "name": "Houston",
+            "selected": false
+          },
+          {
+            "name": "San Francisco",
+            "selected": false
+          }
         ]
       },
       {
         "country": "Belarus",
         "cities": [
-          "Minsk",
-          "Homyel",
-          "Mahilyow"
+          {
+            "name": "Minsk",
+            "selected": true
+          },
+          {
+            "name": "Homyel",
+            "selected": true
+          },
+          {
+            "name": "Mahilyow",
+            "selected": false
+          }
         ]
       }
     ]
   },
   {
     "id": 6,
-    "name": "ex dolor",
-    "email": "ipsum@primordia.co.uk",
-    "count": 31,
-    "price": "495.41",
+    "name": "Lorem velit in",
+    "email": "do@dognosis.io",
+    "count": 33,
+    "price": "636.53",
     "delivery": [
       {
         "country": "Russia",
         "cities": [
-          "Moskow",
-          "Novosibirsk",
-          "Krasnoyarsk"
+          {
+            "name": "Moskow",
+            "selected": false
+          },
+          {
+            "name": "Novosibirsk",
+            "selected": false
+          },
+          {
+            "name": "Krasnoyarsk",
+            "selected": true
+          }
         ]
       },
       {
         "country": "USA",
         "cities": [
-          "New-York",
-          "Houston",
-          "San Francisco"
+          {
+            "name": "New-York",
+            "selected": true
+          },
+          {
+            "name": "Houston",
+            "selected": false
+          },
+          {
+            "name": "San Francisco",
+            "selected": false
+          }
         ]
       },
       {
         "country": "Belarus",
         "cities": [
-          "Minsk",
-          "Homyel",
-          "Mahilyow"
+          {
+            "name": "Minsk",
+            "selected": false
+          },
+          {
+            "name": "Homyel",
+            "selected": false
+          },
+          {
+            "name": "Mahilyow",
+            "selected": false
+          }
         ]
       }
     ]
   },
   {
     "id": 7,
-    "name": "ea",
-    "email": "id@fuelworks.us",
-    "count": 16,
-    "price": "404.88",
+    "name": "laborum eiusmod labore",
+    "email": "sint@isologica.tv",
+    "count": 30,
+    "price": "975.79",
     "delivery": [
       {
         "country": "Russia",
         "cities": [
-          "Moskow",
-          "Novosibirsk",
-          "Krasnoyarsk"
+          {
+            "name": "Moskow",
+            "selected": false
+          },
+          {
+            "name": "Novosibirsk",
+            "selected": false
+          },
+          {
+            "name": "Krasnoyarsk",
+            "selected": false
+          }
         ]
       },
       {
         "country": "USA",
         "cities": [
-          "New-York",
-          "Houston",
-          "San Francisco"
+          {
+            "name": "New-York",
+            "selected": false
+          },
+          {
+            "name": "Houston",
+            "selected": false
+          },
+          {
+            "name": "San Francisco",
+            "selected": false
+          }
         ]
       },
       {
         "country": "Belarus",
         "cities": [
-          "Minsk",
-          "Homyel",
-          "Mahilyow"
+          {
+            "name": "Minsk",
+            "selected": true
+          },
+          {
+            "name": "Homyel",
+            "selected": true
+          },
+          {
+            "name": "Mahilyow",
+            "selected": false
+          }
         ]
       }
     ]
   },
   {
     "id": 8,
-    "name": "laboris eu ullamco",
-    "email": "non@medicroix.me",
-    "count": 6,
-    "price": "659.56",
+    "name": "exercitation",
+    "email": "sint@photobin.co.uk",
+    "count": 98,
+    "price": "903.16",
     "delivery": [
       {
         "country": "Russia",
         "cities": [
-          "Moskow",
-          "Novosibirsk",
-          "Krasnoyarsk"
+          {
+            "name": "Moskow",
+            "selected": true
+          },
+          {
+            "name": "Novosibirsk",
+            "selected": true
+          },
+          {
+            "name": "Krasnoyarsk",
+            "selected": false
+          }
         ]
       },
       {
         "country": "USA",
         "cities": [
-          "New-York",
-          "Houston",
-          "San Francisco"
+          {
+            "name": "New-York",
+            "selected": true
+          },
+          {
+            "name": "Houston",
+            "selected": false
+          },
+          {
+            "name": "San Francisco",
+            "selected": true
+          }
         ]
       },
       {
         "country": "Belarus",
         "cities": [
-          "Minsk",
-          "Homyel",
-          "Mahilyow"
+          {
+            "name": "Minsk",
+            "selected": true
+          },
+          {
+            "name": "Homyel",
+            "selected": true
+          },
+          {
+            "name": "Mahilyow",
+            "selected": false
+          }
         ]
       }
     ]
   },
   {
     "id": 9,
-    "name": "ullamco",
-    "email": "enim@signidyne.ca",
-    "count": 11,
-    "price": "125.19",
+    "name": "laborum nulla commodo",
+    "email": "et@nikuda.net",
+    "count": 5,
+    "price": "351.52",
     "delivery": [
       {
         "country": "Russia",
         "cities": [
-          "Moskow",
-          "Novosibirsk",
-          "Krasnoyarsk"
+          {
+            "name": "Moskow",
+            "selected": true
+          },
+          {
+            "name": "Novosibirsk",
+            "selected": false
+          },
+          {
+            "name": "Krasnoyarsk",
+            "selected": true
+          }
         ]
       },
       {
         "country": "USA",
         "cities": [
-          "New-York",
-          "Houston",
-          "San Francisco"
+          {
+            "name": "New-York",
+            "selected": false
+          },
+          {
+            "name": "Houston",
+            "selected": true
+          },
+          {
+            "name": "San Francisco",
+            "selected": false
+          }
         ]
       },
       {
         "country": "Belarus",
         "cities": [
-          "Minsk",
-          "Homyel",
-          "Mahilyow"
+          {
+            "name": "Minsk",
+            "selected": true
+          },
+          {
+            "name": "Homyel",
+            "selected": false
+          },
+          {
+            "name": "Mahilyow",
+            "selected": true
+          }
         ]
       }
     ]
   },
   {
     "id": 10,
-    "name": "culpa",
-    "email": "occaecat@orbin.io",
-    "count": 54,
-    "price": "473.48",
+    "name": "nostrud",
+    "email": "mollit@columella.org",
+    "count": 68,
+    "price": "284.75",
     "delivery": [
       {
         "country": "Russia",
         "cities": [
-          "Moskow",
-          "Novosibirsk",
-          "Krasnoyarsk"
+          {
+            "name": "Moskow",
+            "selected": false
+          },
+          {
+            "name": "Novosibirsk",
+            "selected": true
+          },
+          {
+            "name": "Krasnoyarsk",
+            "selected": true
+          }
         ]
       },
       {
         "country": "USA",
         "cities": [
-          "New-York",
-          "Houston",
-          "San Francisco"
+          {
+            "name": "New-York",
+            "selected": false
+          },
+          {
+            "name": "Houston",
+            "selected": true
+          },
+          {
+            "name": "San Francisco",
+            "selected": true
+          }
         ]
       },
       {
         "country": "Belarus",
         "cities": [
-          "Minsk",
-          "Homyel",
-          "Mahilyow"
+          {
+            "name": "Minsk",
+            "selected": false
+          },
+          {
+            "name": "Homyel",
+            "selected": true
+          },
+          {
+            "name": "Mahilyow",
+            "selected": false
+          }
         ]
       }
     ]
