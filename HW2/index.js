@@ -225,3 +225,4 @@ class App {
         }
     };
 }
+$(document).ready(new App())
