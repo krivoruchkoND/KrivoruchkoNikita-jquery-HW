@@ -13,6 +13,7 @@ class App {
             status: 'SORTING',  // EDITING, DELETING
             search: '',
         };
+        $('#searchButton').click(this.searchHandler);
         this.loadData();
     }
 
@@ -69,7 +70,9 @@ class App {
 
     // Обработка поиска
     searchHandler = (event) => {
-        
+        this.state.status = "SORTING"
+        this.state.search = $('#searchRequest').val();
+        this.render();
     };
 
     // Обработка изменения/добавления товара
@@ -142,7 +145,7 @@ class App {
             });
         } else {
             searchedProducts = products;
-        }
+        };
         // Отсортированные товары
         const sortedProducts = _.orderBy(searchedProducts, sortBy.toLowerCase(), sortOrder.toLowerCase())
         // Чистим старое, добавляем новое
