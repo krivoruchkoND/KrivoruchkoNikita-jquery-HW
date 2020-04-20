@@ -14,12 +14,28 @@ class App {
             search: '',
         };
         $('#searchButton').click(this.searchHandler);
+        $('#addNewButton').click({ product: this.nullProduct }, this.editHandler);
         this.loadData();
     }
 
+    // Null object pattern для товара
+    nullProduct = {
+        id: null,
+        name: 'New Product',
+        email: '',
+        count: 0,
+        price: 0,
+        delivery: 
+            {
+                russia: { moskow: false, novosibirsk: false, krasnoyarsk: false },
+                usa: { newYork: false, houston: false, sanFrancisco: false },
+                belarus: { minsk: false, homyel: false, mahilyow: false },
+            }
+    };
+
     // ajax запрос списка товаров
     loadData() {
-        const url = 'https://api.jsonbin.io/b/5e962adc5fa47104cea07c45/4';
+        const url = 'https://api.jsonbin.io/b/5e962adc5fa47104cea07c45/7';
         const key = '$2b$10$ltjATMhqY0JfYN5Mi1k1nOVTEQIGJwabv1R6Fb9CUjOUl7jTe6PwG';
         $.ajax({
             type: 'GET',
@@ -91,12 +107,26 @@ class App {
 
     // Удаление товара
     deleteProduct = (event) => {
+        this.state.status = 'SORTING';
         const { products } = this.state;
         const { toggleDeletion, product } = event.data;
         toggleDeletion === 'YES' ? _.remove(products, product) : null;
-        this.state.status = 'SORTING';
         this.render();
     };
+
+    // Изменение/создание товара
+    editProduct = (event) => {
+        this.state.status = 'SORTING';
+        const { toggleSave, editableProduct } = event.data;
+        // Если нажали отмену, то рендер таблицы
+        if (toggleSave === 'NO') {
+            return this.render();
+        };
+        // Если получили null object, то клонируем его - создаем новый товар, иначе работаем с существующим товаром
+        const product = editableProduct.id === null ? _.clone(editableProduct) : editableProduct;
+        
+        this.render();
+    }
 
     // Отрисовка шапки таблицы
     renderTableHead() {
@@ -190,6 +220,19 @@ class App {
         $('#deleteNoButton').click({ toggleDeletion: 'NO' }, this.deleteProduct);
     };
 
+    // Отрисовка чекбоксов с городами
+    renderCities(event, _country = null) {
+        const { editableProduct } = event.data;
+        const country =  _country ? _country : this.value;
+        const cities = editableProduct.delivery[country];
+        const checkboxes = $('#citiesCheckboxes').empty();
+        _.keys(cities).forEach((city) => {
+            $('<div>', { class: "form-check" }).append(
+                $('<input>', { class: "form-check-input", type: "checkbox", id: `${city}Checkbox`, checked: editableProduct.delivery[country][city] }),
+                $('<label>', { class: "form-check-label", for: `${city}Checkbox` }).text(city.replace(/([A-Z])/g, ' $1').replace(/^./, (s) => s.toUpperCase())),
+            ).appendTo(checkboxes);
+        });
+    };
     // Отрисовка модального окна изменения/добавления товара
     renderEditModal(product) {
         // Показываем модальное окно и бекдроп
@@ -197,8 +240,23 @@ class App {
         $('#editModal').show();
         // Находим изменяемый товар
         // Если его нет, значит это будет новый товар
-        const headerText = product ? product.name : 'New product';
-        $('#editingProductName').text(headerText);
+        const editableProduct = product.id ? product : this.nullProduct;
+        // Заполняем поля формы
+        $('#editingProductName').text(editableProduct.name);
+        $('#inputProductName').val(editableProduct.name);
+        $('#inputProductEmail').val(editableProduct.email);
+        $('#inputProductCount').val(editableProduct.count);
+        $('#inputProductPrice').val(Number(editableProduct.price).toLocaleString('en-US', { style: 'currency', currency: 'USD' }));
+        $('#saveEditButton').click({ toggleSave: 'YES', editableProduct }, this.editProduct);
+        $('#cancelEditButton').click({ toggleSave: 'NO' }, this.editProduct);
+        // Чистим и заполняем список стран. При изменении селекта отрисовываем соответствующие города
+        $('#countrySelect').empty().append(
+            $('<option>', { value: 'russia' }).text('Russia'),
+            $('<option>', { value: 'belarus' }).text('Belarus'),
+            $('<option>', { value: 'usa' }).text('USA'),
+        ).on('change', { editableProduct }, this.renderCities);
+        // Отрисовываем города для селекта по умолчанию
+        this.renderCities( { data: { editableProduct } }, $('#countrySelect').val() );
     };
 
     // Отрисовка приложения в зависимости от статуса
@@ -228,4 +286,6 @@ class App {
         }
     };
 }
-$(document).ready(new App())
+
+// Запускам приложение после парсинга HTML
+$(document).ready(new App());
