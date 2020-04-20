@@ -22,9 +22,9 @@ class App {
     nullProduct = {
         id: null,
         name: 'New Product',
-        email: '',
-        count: 0,
-        price: 0,
+        email: null,
+        count: null,
+        price: null,
         delivery: 
             {
                 russia: { moskow: false, novosibirsk: false, krasnoyarsk: false },
@@ -124,7 +124,17 @@ class App {
         };
         // Если получили null object, то клонируем его - создаем новый товар, иначе работаем с существующим товаром
         const product = editableProduct.id === null ? _.clone(editableProduct) : editableProduct;
-        
+        // Обычно id сущностям присваивают на серверной стороне, поэтому тут это выглядит так нелепо
+        product.id = 1000 + _.uniqueId();
+        product.name = $('#inputProductName').val();
+        product.email = $('#inputProductEmail').val();
+        product.count = Number($('#inputProductCount').val());
+        product.price = Number($('#inputProductPrice').val());
+        // Если новый продукт, то добавляем в массив товаров
+        if (editableProduct.id === null) {
+            this.state.products.push(product);
+        }
+        console.log(product);
         this.render();
     }
 
