@@ -35,7 +35,7 @@ class App {
 
     // ajax запрос списка товаров
     loadData() {
-        const url = 'https://api.jsonbin.io/b/5e962adc5fa47104cea07c45/7';
+        const url = 'https://api.jsonbin.io/b/5e962adc5fa47104cea07c45/8';
         const key = '$2b$10$ltjATMhqY0JfYN5Mi1k1nOVTEQIGJwabv1R6Fb9CUjOUl7jTe6PwG';
         $.ajax({
             type: 'GET',
@@ -194,8 +194,7 @@ class App {
                 ),
                 // Столбец с ценой товара
                 $('<td>', { class: 'align-middle' })
-                    .text(Number(product.price)
-                        .toLocaleString('en-US', { style: 'currency', currency: 'USD' })),
+                    .text(product.price.toLocaleString('en-US', { style: 'currency', currency: 'USD' })),
                 // Столбец с действиями
                 $('<td>').append(
                     $('<button>', { class: "btn btn-primary mr-2 ml-2" })

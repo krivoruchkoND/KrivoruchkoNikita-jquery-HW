@@ -4,7 +4,7 @@
     "name": "do laboris et",
     "email": "consequat@kyaguru.ca",
     "count": 82,
-    "price": "270.44",
+    "price": 270.44,
     "delivery": {
       "russia": {
         "moskow": false,
@@ -28,7 +28,7 @@
     "name": "in est",
     "email": "minim@plasmox.io",
     "count": 41,
-    "price": "667.34",
+    "price": 667.34,
     "delivery": {
       "russia": {
         "moskow": true,
@@ -52,7 +52,7 @@
     "name": "minim dolor non",
     "email": "nulla@pyramia.org",
     "count": 10,
-    "price": "935.85",
+    "price": 935.85,
     "delivery": {
       "russia": {
         "moskow": true,
@@ -76,7 +76,7 @@
     "name": "ut fugiat consequat",
     "email": "ullamco@dancerity.biz",
     "count": 79,
-    "price": "93.31",
+    "price": 93.31,
     "delivery": {
       "russia": {
         "moskow": true,
@@ -100,7 +100,7 @@
     "name": "ad commodo",
     "email": "labore@hopeli.me",
     "count": 36,
-    "price": "380.37",
+    "price": 380.37,
     "delivery": {
       "russia": {
         "moskow": true,
@@ -124,7 +124,7 @@
     "name": "elit",
     "email": "minim@intergeek.us",
     "count": 64,
-    "price": "64.52",
+    "price": 64.52,
     "delivery": {
       "russia": {
         "moskow": true,
@@ -148,7 +148,7 @@
     "name": "mollit",
     "email": "eiusmod@orboid.biz",
     "count": 8,
-    "price": "488.67",
+    "price": 488.67,
     "delivery": {
       "russia": {
         "moskow": false,
@@ -172,7 +172,7 @@
     "name": "aute",
     "email": "nostrud@zillatide.co.uk",
     "count": 72,
-    "price": "76.35",
+    "price": 76.35,
     "delivery": {
       "russia": {
         "moskow": false,
@@ -196,7 +196,7 @@
     "name": "voluptate",
     "email": "laboris@acruex.com",
     "count": 13,
-    "price": "433.1",
+    "price": 433.1,
     "delivery": {
       "russia": {
         "moskow": false,
@@ -220,7 +220,7 @@
     "name": "proident duis officia",
     "email": "ut@liquicom.name",
     "count": 69,
-    "price": "624.2",
+    "price": 624.2,
     "delivery": {
       "russia": {
         "moskow": false,
