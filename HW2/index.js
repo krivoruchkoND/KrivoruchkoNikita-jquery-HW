@@ -134,7 +134,6 @@ class App {
         if (editableProduct.id === null) {
             this.state.products.push(product);
         }
-        console.log(product);
         this.render();
     }
 
@@ -172,17 +171,14 @@ class App {
     // Отрисовка тела таблицы
     renderTableBody() {
         const { sortBy, sortOrder, products, search } = this.state;
-        const tableBody = $('#tableBody')
+        const tableBody = $('#tableBody');
         // Нормализуем поисковой запрос
         const searchStr = search.trim().toLowerCase();
         let searchedProducts = [];
         if (!searchStr == '') {
             // Товары, соответствующие поисковому запросу
-            searchedProducts = products.filter((product) => {
-                // Нормализуем название товара
-                const name = product.name.trim().toLowerCase();
-                return name.startsWith(searchStr);
-            });
+            // Нормализуем название товара и ищем вхождение подстроки
+            searchedProducts = products.filter((product) =>  product.name.trim().toLowerCase().includes(searchStr));
         } else {
             searchedProducts = products;
         };
