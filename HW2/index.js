@@ -58,12 +58,18 @@ class App {
                 'secret-key': JSONBin.key,
             },
             url,
+            beforeSend:  () => {
+                $('#deleteModal').hide();
+                $('#editModal').hide();
+                $('#backdrop').show();
+                $('#loading').show();
+            },
         })
         .then((response) => {
             this.state.products = response;
         })
         .catch(() => {
-            alert('Error while JSON loading');
+            alert('Error while JSON GET');
         })
         // Если пришел ответ, то отрисовываем приложение
         .then(() => {
@@ -90,6 +96,12 @@ class App {
             },
             data,
             url,
+            beforeSend:  () => {
+                $('#deleteModal').hide();
+                $('#editModal').hide();
+                $('#backdrop').show();
+                $('#loading').show();
+            },
         })
         // В ответе получаем новый список товаров
         .then(({ data }) => {
@@ -97,7 +109,7 @@ class App {
         })
         // Или ошибку
         .catch(() => {
-            alert('Error while JSON sending');
+            alert('Error while JSON PUT');
         })
         .then(() => {
             this.render();
@@ -133,7 +145,7 @@ class App {
     }
 
     // Обработка поиска
-    searchHandler = (event) => {
+    searchHandler = () => {
         this.state.status = "SORTING"
         this.inputs.search = $('#searchRequest').val();
         this.render();
@@ -275,9 +287,11 @@ class App {
         // Показываем модальное окно и бекдроп
         $('#backdrop').show();
         $('#deleteModal').show();
-        // Находим удалаемый товар 
         $('#deletingProductName').text(product.name);
+        // Удаляем старую и навешиваем новую подписку на событие
+        $('#deleteYesButton').unbind();
         $('#deleteYesButton').click({ toggleDeletion: 'YES', product }, this.deleteProduct);
+        $('#deleteNoButton').unbind();
         $('#deleteNoButton').click({ toggleDeletion: 'NO' }, this.deleteProduct);
     };
 
@@ -294,6 +308,7 @@ class App {
             ).appendTo(checkboxes);
         });
     };
+
     // Отрисовка модального окна изменения/добавления товара
     renderEditModal(product) {
         // Показываем модальное окно и бекдроп
@@ -307,8 +322,11 @@ class App {
         $('#inputProductName').val(editableProduct.name);
         $('#inputProductEmail').val(editableProduct.email);
         $('#inputProductCount').val(editableProduct.count);
-        $('#inputProductPrice').val(Number(editableProduct.price).toLocaleString('en-US', { style: 'currency', currency: 'USD' }));
+        $('#inputProductPrice').val(editableProduct.price.toLocaleString('en-US', { style: 'currency', currency: 'USD' }));
+        // Удаляем старую и навешиваем новую подписку на событие
+        $('#saveEditButton').unbind();
         $('#saveEditButton').click({ toggleSave: 'YES', editableProduct }, this.editProduct);
+        $('#cancelEditButton').unbind();
         $('#cancelEditButton').click({ toggleSave: 'NO' }, this.editProduct);
         // Чистим и заполняем список стран. При изменении селекта отрисовываем соответствующие города
         $('#countrySelect').empty().append(
