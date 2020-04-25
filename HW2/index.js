@@ -3,9 +3,9 @@ class App {
         // Состояние приложения:
         this.state = {
             products: [],
-            sortBy: 'NAME',     // PRICE
-            sortOrder: 'DESC',  // ASC
-            status: 'SORTING',  // EDITING, DELETING
+            sortBy: 'NAME',
+            sortOrder: 'DESC',
+            status: 'SORTING',
         };
         // Данные для доступа к JSON серверу
         this.JSONBin = {
@@ -21,11 +21,11 @@ class App {
             email: '',
             count: '',
             price: '',
-        }
+        };
         // Навешиваем обработчики на кнопки и загружаем данные
         this.inputsInit();
         this.getData();
-    }
+    };
 
     // Null object товара
     nullProduct = {
@@ -39,14 +39,22 @@ class App {
                 russia: { moskow: false, novosibirsk: false, krasnoyarsk: false },
                 usa: { newYork: false, houston: false, sanFrancisco: false },
                 belarus: { minsk: false, homyel: false, mahilyow: false },
-            }
+            },
     };
 
     // Инициализация инпутов
     inputsInit() {
         $('#searchButton').click(this.searchHandler);
         $('#addNewButton').click({ product: this.nullProduct }, this.editHandler);
-    }
+    };
+
+    // Отобразить спиннер загрузки
+    showLoading() {
+        $('#deleteModal').hide();
+        $('#editModal').hide();
+        $('#backdrop').show();
+        $('#loading').show();
+    };
 
     // запрос списка товаров
     getData() {
@@ -59,10 +67,7 @@ class App {
             },
             url,
             beforeSend:  () => {
-                $('#deleteModal').hide();
-                $('#editModal').hide();
-                $('#backdrop').show();
-                $('#loading').show();
+                this.showLoading();
             },
         })
         .then((response) => {
@@ -97,10 +102,7 @@ class App {
             data,
             url,
             beforeSend:  () => {
-                $('#deleteModal').hide();
-                $('#editModal').hide();
-                $('#backdrop').show();
-                $('#loading').show();
+                this.showLoading();
             },
         })
         // В ответе получаем новый список товаров
@@ -117,7 +119,7 @@ class App {
         .catch(() => {
             alert('Error while render');
         });
-    }
+    };
 
     // Смена поля сортировки
     toggleSortBy() {
@@ -142,7 +144,7 @@ class App {
             this.toggleSortBy();
         };
         this.render();
-    }
+    };
 
     // Обработка поиска
     searchHandler = () => {
@@ -185,6 +187,7 @@ class App {
         this.state.status = 'SORTING';
         const { toggleSave, editableProduct } = event.data;
         if (toggleSave === 'YES') {
+            const { products } = this.state;
             // Если получили null object, то клонируем его - создаем новый товар, иначе работаем с существующим товаром
             const product = editableProduct.id === null ? _.clone(editableProduct) : editableProduct;
             product.name = $('#inputProductName').val();
@@ -193,9 +196,9 @@ class App {
             product.price = Number($('#inputProductPrice').val().slice(1));
             // Если новый продукт, то добавляем в массив товаров
             if (editableProduct.id === null) {
-                // Будет пересечени id, но в коде никогда не происходит выборки по id. Скорее всего уникальный id должн назначать сервер
+                // Будет пересечение id, но в коде никогда не происходит выборки по id. Скорее всего, уникальный id должн назначать сервер
                 product.id = _.uniqueId();
-                this.state.products.push(product);
+                products.push(product);
             }
             // Отправляем новый список на сервер
             this.putData();
