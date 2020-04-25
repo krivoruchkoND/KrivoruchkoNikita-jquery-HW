@@ -44,6 +44,7 @@ class App {
 
     // Инициализация инпутов
     inputsInit() {
+        $('#searchRequest').on('keypress', (e) => e.which == 13 ? this.searchHandler() : null);
         $('#searchButton').click(this.searchHandler);
         $('#addNewButton').click({ product: this.nullProduct }, this.editHandler);
     };
@@ -292,10 +293,8 @@ class App {
         $('#deleteModal').show();
         $('#deletingProductName').text(product.name);
         // Удаляем старую и навешиваем новую подписку на событие
-        $('#deleteYesButton').unbind();
-        $('#deleteYesButton').click({ toggleDeletion: 'YES', product }, this.deleteProduct);
-        $('#deleteNoButton').unbind();
-        $('#deleteNoButton').click({ toggleDeletion: 'NO' }, this.deleteProduct);
+        $('#deleteYesButton').unbind().click({ toggleDeletion: 'YES', product }, this.deleteProduct);
+        $('#deleteNoButton').unbind().click({ toggleDeletion: 'NO' }, this.deleteProduct);
     };
 
     // Отрисовка чекбоксов с городами
@@ -310,6 +309,7 @@ class App {
                 $('<label>', { class: "form-check-label", for: `${city}Checkbox` }).text(city.replace(/([A-Z])/g, ' $1').replace(/^./, (s) => s.toUpperCase())),
             ).appendTo(checkboxes);
         });
+        $('#selectAllCheckbox').prop('checked', false);
     };
 
     // Отрисовка модального окна изменения/добавления товара
@@ -327,16 +327,18 @@ class App {
         $('#inputProductCount').val(editableProduct.count);
         $('#inputProductPrice').val(editableProduct.price.toLocaleString('en-US', { style: 'currency', currency: 'USD' }));
         // Удаляем старую и навешиваем новую подписку на событие
-        $('#saveEditButton').unbind();
-        $('#saveEditButton').click({ toggleSave: 'YES', editableProduct }, this.editProduct);
-        $('#cancelEditButton').unbind();
-        $('#cancelEditButton').click({ toggleSave: 'NO' }, this.editProduct);
+        $('#saveEditButton').unbind().click({ toggleSave: 'YES', editableProduct }, this.editProduct);
+        $('#cancelEditButton').unbind().click({ toggleSave: 'NO' }, this.editProduct);
         // Чистим и заполняем список стран. При изменении селекта отрисовываем соответствующие города
-        $('#countrySelect').empty().append(
+        $('#countrySelect').empty().off().append(
             $('<option>', { value: 'russia' }).text('Russia'),
             $('<option>', { value: 'belarus' }).text('Belarus'),
             $('<option>', { value: 'usa' }).text('USA'),
         ).on('change', { editableProduct }, this.renderCities);
+        // Селект и деселект всех городов
+        $('#selectAllCheckbox').unbind().change(() => {
+            $('#citiesCheckboxes input').each((i, checkbox) => $(checkbox).prop('checked', $('#selectAllCheckbox').prop('checked')))
+        })
         // Отрисовываем города для селекта по умолчанию
         this.renderCities( { data: { editableProduct } }, $('#countrySelect').val() );
     };
