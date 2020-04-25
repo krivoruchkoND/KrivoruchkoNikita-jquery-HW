@@ -1,24 +1,33 @@
 class App {
     constructor() {
         // Состояние приложения:
-        // products - список товаров, 
-        // sortBy - сортировать по полю, 
-        // sortOrder - порядок сортировки, 
-        // status - статус приложения,
-        // search - строка поиска
         this.state = {
             products: [],
             sortBy: 'NAME',     // PRICE
             sortOrder: 'DESC',  // ASC
             status: 'SORTING',  // EDITING, DELETING
-            search: '',
         };
-        $('#searchButton').click(this.searchHandler);
-        $('#addNewButton').click({ product: this.nullProduct }, this.editHandler);
-        this.loadData();
+        // Данные для доступа к JSON серверу
+        this.JSONBin = {
+            root: 'https://api.jsonbin.io',
+            binId: '5e962adc5fa47104cea07c45',
+            binVersion: 'latest',
+            key: '$2b$10$ltjATMhqY0JfYN5Mi1k1nOVTEQIGJwabv1R6Fb9CUjOUl7jTe6PwG',
+        };
+        // Входные данные
+        this.inputs = {
+            search: '',
+            name: '',
+            email: '',
+            count: '',
+            price: '',
+        }
+        // Навешиваем обработчики на кнопки и загружаем данные
+        this.inputsInit();
+        this.getData();
     }
 
-    // Null object pattern для товара
+    // Null object товара
     nullProduct = {
         id: null,
         name: 'New Product',
@@ -33,14 +42,20 @@ class App {
             }
     };
 
-    // ajax запрос списка товаров
-    loadData() {
-        const url = 'https://api.jsonbin.io/b/5e962adc5fa47104cea07c45/8';
-        const key = '$2b$10$ltjATMhqY0JfYN5Mi1k1nOVTEQIGJwabv1R6Fb9CUjOUl7jTe6PwG';
+    // Инициализация инпутов
+    inputsInit() {
+        $('#searchButton').click(this.searchHandler);
+        $('#addNewButton').click({ product: this.nullProduct }, this.editHandler);
+    }
+
+    // запрос списка товаров
+    getData() {
+        const { JSONBin } = this;
+        const url = [JSONBin.root, 'b', JSONBin.binId, JSONBin.binVersion].join('/');
         $.ajax({
             type: 'GET',
             headers: {
-                'secret-key': key,
+                'secret-key': JSONBin.key,
             },
             url,
         })
@@ -58,6 +73,39 @@ class App {
             alert('Error while render');
         });
     };
+
+    // отправка списка товаров 
+    putData() {
+        const { JSONBin } = this;
+        const { products } = this.state;
+        const url = [JSONBin.root, 'b', JSONBin.binId].join('/');
+        // Проебразуем массив товаров в JSON 
+        const data = JSON.stringify(products);
+        // Отправляем новый список товаров на сервер
+        $.ajax({
+            type: 'PUT',
+            headers: {
+                'secret-key': JSONBin.key,
+                "Content-Type": "application/json",
+            },
+            data,
+            url,
+        })
+        // В ответе получаем новый список товаров
+        .then(({ data }) => {
+            this.state.products = data;
+        })
+        // Или ошибку
+        .catch(() => {
+            alert('Error while JSON sending');
+        })
+        .then(() => {
+            this.render();
+        })
+        .catch(() => {
+            alert('Error while render');
+        });
+    }
 
     // Смена поля сортировки
     toggleSortBy() {
@@ -87,7 +135,7 @@ class App {
     // Обработка поиска
     searchHandler = (event) => {
         this.state.status = "SORTING"
-        this.state.search = $('#searchRequest').val();
+        this.inputs.search = $('#searchRequest').val();
         this.render();
     };
 
@@ -108,34 +156,41 @@ class App {
     // Удаление товара
     deleteProduct = (event) => {
         this.state.status = 'SORTING';
-        const { products } = this.state;
         const { toggleDeletion, product } = event.data;
-        toggleDeletion === 'YES' ? _.remove(products, product) : null;
-        this.render();
+        if (toggleDeletion === 'YES') {
+            const { products } = this.state;
+            // Удаляем выбранный товар из списка товаров
+            _.remove(products, product);
+            // Отправляем новый список на сервер
+            this.putData();
+        } else {
+            this.render();
+        }
     };
 
     // Изменение/создание товара
     editProduct = (event) => {
         this.state.status = 'SORTING';
         const { toggleSave, editableProduct } = event.data;
-        // Если нажали отмену, то рендер таблицы
-        if (toggleSave === 'NO') {
-            return this.render();
-        };
-        // Если получили null object, то клонируем его - создаем новый товар, иначе работаем с существующим товаром
-        const product = editableProduct.id === null ? _.clone(editableProduct) : editableProduct;
-        // Обычно id сущностям присваивают на серверной стороне, поэтому тут это выглядит так нелепо
-        product.id = 1000 + _.uniqueId();
-        product.name = $('#inputProductName').val();
-        product.email = $('#inputProductEmail').val();
-        product.count = Number($('#inputProductCount').val());
-        product.price = Number($('#inputProductPrice').val());
-        // Если новый продукт, то добавляем в массив товаров
-        if (editableProduct.id === null) {
-            this.state.products.push(product);
+        if (toggleSave === 'YES') {
+            // Если получили null object, то клонируем его - создаем новый товар, иначе работаем с существующим товаром
+            const product = editableProduct.id === null ? _.clone(editableProduct) : editableProduct;
+            product.name = $('#inputProductName').val();
+            product.email = $('#inputProductEmail').val();
+            product.count = Number($('#inputProductCount').val());
+            product.price = Number($('#inputProductPrice').val().slice(1));
+            // Если новый продукт, то добавляем в массив товаров
+            if (editableProduct.id === null) {
+                // Будет пересечени id, но в коде никогда не происходит выборки по id. Скорее всего уникальный id должн назначать сервер
+                product.id = _.uniqueId();
+                this.state.products.push(product);
+            }
+            // Отправляем новый список на сервер
+            this.putData();
+        } else {
+            this.render();
         }
-        this.render();
-    }
+    };
 
     // Отрисовка шапки таблицы
     renderTableHead() {
@@ -170,7 +225,8 @@ class App {
 
     // Отрисовка тела таблицы
     renderTableBody() {
-        const { sortBy, sortOrder, products, search } = this.state;
+        const { sortBy, sortOrder, products } = this.state;
+        const { search } = this.inputs;
         const tableBody = $('#tableBody');
         // Нормализуем поисковой запрос
         const searchStr = search.trim().toLowerCase();
@@ -188,12 +244,12 @@ class App {
         $(tableBody).empty();
         sortedProducts.forEach((product) => {
             $('<tr>').append(
-                // Столбце с названием и количеством товара
+                // Столбец с названием и количеством товара
                 $('<td>', { class: 'align-middle' }).append(
                     $('<div>', { class: 'd-flex justify-content-between' }).append(
                         $('<a>', { href: '#' })
                             .text(product.name)
-                            .click(this.editHandler),
+                            .click({ product }, this.editHandler),
                         $('<span>', { class: 'product-count' })
                             .text(product.count),
                     )
@@ -292,5 +348,5 @@ class App {
     };
 }
 
-// Запускам приложение после парсинга HTML
+// Запускам приложение
 $(document).ready(new App());
