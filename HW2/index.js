@@ -16,8 +16,9 @@ class App {
         };
         // Входные данные - строго контролировать нужно только количество и цену
         this.inputs = {
-            count: '',
-            price: '',
+            count: 0,
+            price: 0,
+            search: '',
         };
         // Навешиваем обработчики на кнопки и загружаем данные
         this.inputsInit();
@@ -367,8 +368,22 @@ class App {
         $('#editingProductName').text(editableProduct.name);
         $('#inputProductName').val(editableProduct.name);
         $('#inputProductEmail').val(editableProduct.email);
-        $('#inputProductCount').val(editableProduct.count);
-        $('#inputProductPrice').val(editableProduct.price.toLocaleString('en-US', { style: 'currency', currency: 'USD' }));
+        // Валидация заполнения количества
+        $('#inputProductCount')
+            .val(editableProduct.count)
+            .on('input', function() {
+                $(this).val($(this).val().replace(/[^\d\.]/g, ''));
+                editableProduct.count = Number($(this).val());
+            });
+        // Валидация заполнения цены
+        $('#inputProductPrice')
+            .val(editableProduct.price.toLocaleString('en-US', { style: 'currency', currency: 'USD' }))
+            .on('focus', function() {$(this).val(editableProduct.price)})
+            .on('focusout', function() {$(this).val(editableProduct.price.toLocaleString('en-US', { style: 'currency', currency: 'USD' }))})
+            .on('input', function() {
+                $(this).val($(this).val().replace(/[^\d\.]/g, ''));
+                editableProduct.price = Number($(this).val());
+            });
         // Удаляем старую и навешиваем новую подписку на событие
         $('#saveEditButton').off().on('click', { toggleSave: 'YES', editableProduct }, this.editProduct);
         $('#cancelEditButton').off().on('click', { toggleSave: 'NO' }, this.editProduct);
