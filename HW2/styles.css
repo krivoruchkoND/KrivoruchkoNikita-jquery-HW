@@ -36,3 +36,11 @@
 	top: 50%;
 	right: 50%;
 }
+
+.valid {
+	color: green;
+}
+
+.invalid {
+	color: red;
+}

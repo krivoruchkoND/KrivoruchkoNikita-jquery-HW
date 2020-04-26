@@ -31,9 +31,9 @@ class App {
     nullProduct = {
         id: null,
         name: 'New Product',
-        email: null,
-        count: null,
-        price: null,
+        email: 'Supplier Email',
+        count: 0,
+        price: 0,
         delivery: 
             {
                 russia: { moskow: false, novosibirsk: false, krasnoyarsk: false },
@@ -183,6 +183,15 @@ class App {
         }
     };
 
+    checkValidation = (product) => {
+        const validation = {};
+        validation.name = /^([a-zA-Z0-9\s_-]){5,15}$/.test(product.name);
+        validation.email = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(product.email);
+        validation.count = product.count > 0;
+        validation.price = product.price > 0;
+        return validation;
+    };
+
     // Изменение/создание товара
     editProduct = (event) => {
         this.state.status = 'SORTING';
@@ -195,14 +204,21 @@ class App {
             product.email = $('#inputProductEmail').val();
             product.count = Number($('#inputProductCount').val());
             product.price = Number($('#inputProductPrice').val().slice(1));
+            
             // Если новый продукт, то добавляем в массив товаров
             if (editableProduct.id === null) {
                 // Будет пересечение id, но в коде никогда не происходит выборки по id. Скорее всего, уникальный id должн назначать сервер
                 product.id = _.uniqueId();
                 products.push(product);
             }
-            // Отправляем новый список на сервер
-            this.putData();
+            const validation = this.checkValidation(product);
+            // Проверяме, все ли поля валидны
+            if (!Object.keys(validation).some((prop) => !validation[prop])) {
+                // Отправляем новый список на сервер
+                this.putData();
+            } else {
+                this.renderErrors(validation);
+            }
         } else {
             this.render();
         }
@@ -312,6 +328,14 @@ class App {
         $('#selectAllCheckbox').prop('checked', false);
     };
 
+    // Отрисовка ошибок валидации
+    renderErrors(validation) {
+        const fields = Object.keys(validation);
+        fields.forEach((field) => {
+            validation[field] ? $(`#${field}Help`).removeClass('invalid').addClass('valid') : $(`#${field}Help`).removeClass('valid').addClass('invalid');
+        });
+    };
+
     // Отрисовка модального окна изменения/добавления товара
     renderEditModal(product) {
         // Показываем модальное окно и бекдроп
@@ -338,7 +362,7 @@ class App {
         // Селект и деселект всех городов
         $('#selectAllCheckbox').unbind().change(() => {
             $('#citiesCheckboxes input').each((i, checkbox) => $(checkbox).prop('checked', $('#selectAllCheckbox').prop('checked')))
-        })
+        });
         // Отрисовываем города для селекта по умолчанию
         this.renderCities( { data: { editableProduct } }, $('#countrySelect').val() );
     };
