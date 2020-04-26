@@ -45,8 +45,8 @@ class App {
     // Инициализация инпутов
     inputsInit() {
         $('#searchRequest').on('keypress', (e) => e.which == 13 ? this.searchHandler() : null);
-        $('#searchButton').click(this.searchHandler);
-        $('#addNewButton').click({ product: this.nullProduct }, this.editHandler);
+        $('#searchButton').on('click', this.searchHandler);
+        $('#addNewButton').on('click', { product: this.nullProduct }, this.editHandler);
     };
 
     // Отобразить спиннер загрузки
@@ -70,6 +70,7 @@ class App {
             beforeSend:  () => {
                 this.showLoading();
             },
+
         })
         .then((response) => {
             this.state.products = response;
@@ -183,12 +184,13 @@ class App {
         }
     };
 
+    // Валидация инпутов
     checkValidation = (product) => {
         const validation = {};
         validation.name = /^([a-zA-Z0-9\s_-]){5,15}$/.test(product.name);
         validation.email = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(product.email);
-        validation.count = product.count > 0;
-        validation.price = product.price > 0;
+        validation.count = /([0-9])$/.test(product.count) && product.count > 0;
+        validation.price = /([0-9])$/.test(product.price) && product.price > 0;
         return validation;
     };
 
@@ -198,20 +200,17 @@ class App {
         const { toggleSave, editableProduct } = event.data;
         if (toggleSave === 'YES') {
             const { products } = this.state;
-            // Если получили null object, то клонируем его - создаем новый товар, иначе работаем с существующим товаром
-            const product = editableProduct.id === null ? _.clone(editableProduct) : editableProduct;
-            product.name = $('#inputProductName').val();
-            product.email = $('#inputProductEmail').val();
-            product.count = Number($('#inputProductCount').val());
-            product.price = Number($('#inputProductPrice').val().slice(1));
-            
+            editableProduct.name = $('#inputProductName').val();
+            editableProduct.email = $('#inputProductEmail').val();
+            editableProduct.count = Number($('#inputProductCount').val());
+            editableProduct.price = Number($('#inputProductPrice').val().match(/[0-9.]/gm).join(''));          
             // Если новый продукт, то добавляем в массив товаров
             if (editableProduct.id === null) {
                 // Будет пересечение id, но в коде никогда не происходит выборки по id. Скорее всего, уникальный id должн назначать сервер
-                product.id = _.uniqueId();
-                products.push(product);
+                editableProduct.id = _.uniqueId();
+                products.push(editableProduct);
             }
-            const validation = this.checkValidation(product);
+            const validation = this.checkValidation(editableProduct);
             // Проверяме, все ли поля валидны
             if (!Object.keys(validation).some((prop) => !validation[prop])) {
                 // Отправляем новый список на сервер
@@ -230,29 +229,27 @@ class App {
         const { sortBy, sortOrder } = this.state;
         // Выбор имени стиля для отрисовки иконки сортировки
         const sortIcon = sortOrder === 'ASC' ? 'up-arrow' : 'down-arrow';
+        const createHeder = (str) => {
+            return $('<th>').append(
+                $('<a>', { href: '#', class: `d-flex justify-content-between align-items-center ${sortBy === str ? sortIcon : ''}` })
+                    .text(_.capitalize(str))
+                    .on('click',{ type: str }, this.sortHandler)
+            );
+        }
         // Заголовок столбца Name
-        const nameEl = $('<th>').append(
-            // Решаем, добавлять ли иконку сортировки
-            $('<a>', { href: '#', class: `d-flex justify-content-between align-items-center ${sortBy === 'NAME' ? sortIcon : ''}` })
-                .text('Name')
-                .click({ type: 'NAME' }, this.sortHandler)
-        );
+        const nameEl = createHeder('NAME');
         // Заголовок столбца Price
-        const priceEl = $('<th>').append(
-            // Решаем, добавлять ли иконку сортировки
-            $('<a>', { href: '#', class: `d-flex justify-content-between align-items-center ${sortBy === 'PRICE' ? sortIcon : ''}` })
-                .text('Price')
-                .click({ type: 'PRICE' }, this.sortHandler)
-        );
+        const priceEl = createHeder('PRICE');
         // Заголовок столбца Actions
         const actionsEl = $('<th>', { class: 'pl-4' }).text('Actions');
         // Чистим старое, добавляем новое
-        $(tableHead).empty();
-        $('<tr>').append(
-            $(nameEl),
-            $(priceEl),
-            $(actionsEl)
-        ).appendTo(tableHead);
+        $(tableHead).empty().append(
+            $('<tr>').append(
+                $(nameEl),
+                $(priceEl),
+                $(actionsEl),
+            ),
+        );
     };
 
     // Отрисовка тела таблицы
@@ -275,30 +272,32 @@ class App {
         // Чистим старое, добавляем новое
         $(tableBody).empty();
         sortedProducts.forEach((product) => {
-            $('<tr>').append(
-                // Столбец с названием и количеством товара
-                $('<td>', { class: 'align-middle' }).append(
-                    $('<div>', { class: 'd-flex justify-content-between' }).append(
-                        $('<a>', { href: '#' })
-                            .text(product.name)
-                            .click({ product }, this.editHandler),
-                        $('<span>', { class: 'product-count' })
-                            .text(product.count),
-                    )
+            $(tableBody).append(
+                $('<tr>').append(
+                    // Столбец с названием и количеством товара
+                    $('<td>', { class: 'align-middle' }).append(
+                        $('<div>', { class: 'd-flex justify-content-between' }).append(
+                            $('<a>', { href: '#' })
+                                .text(product.name)
+                                .on('click', { product }, this.editHandler),
+                            $('<span>', { class: 'product-count' })
+                                .text(product.count),
+                        ),
+                    ),
+                    // Столбец с ценой товара
+                    $('<td>', { class: 'align-middle' })
+                        .text(product.price.toLocaleString('en-US', { style: 'currency', currency: 'USD' })),
+                    // Столбец с действиями
+                    $('<td>').append(
+                        $('<button>', { class: "btn btn-primary mr-2 ml-2" })
+                            .text('Edit')
+                            .on('click', { product }, this.editHandler),
+                        $('<button>', { class: "btn btn-secondary mr-2 ml-2" })
+                            .text('Delete')
+                            .on('click', { product }, this.deleteHandler),
+                    ),
                 ),
-                // Столбец с ценой товара
-                $('<td>', { class: 'align-middle' })
-                    .text(product.price.toLocaleString('en-US', { style: 'currency', currency: 'USD' })),
-                // Столбец с действиями
-                $('<td>').append(
-                    $('<button>', { class: "btn btn-primary mr-2 ml-2" })
-                        .text('Edit')
-                        .click({ product }, this.editHandler),
-                    $('<button>', { class: "btn btn-secondary mr-2 ml-2" })
-                        .text('Delete')
-                        .click({ product }, this.deleteHandler),
-                ),
-            ).appendTo(tableBody);
+            )
         })
     };
 
@@ -309,8 +308,8 @@ class App {
         $('#deleteModal').show();
         $('#deletingProductName').text(product.name);
         // Удаляем старую и навешиваем новую подписку на событие
-        $('#deleteYesButton').unbind().click({ toggleDeletion: 'YES', product }, this.deleteProduct);
-        $('#deleteNoButton').unbind().click({ toggleDeletion: 'NO' }, this.deleteProduct);
+        $('#deleteYesButton').off().on('click', { toggleDeletion: 'YES', product }, this.deleteProduct);
+        $('#deleteNoButton').off().on('click', { toggleDeletion: 'NO' }, this.deleteProduct);
     };
 
     // Отрисовка чекбоксов с городами
@@ -319,13 +318,27 @@ class App {
         const country =  _country ? _country : this.value;
         const cities = editableProduct.delivery[country];
         const checkboxes = $('#citiesCheckboxes').empty();
+        // Рисуем для каждого города чекбокс с подписью и подписываем его на событие
         _.keys(cities).forEach((city) => {
-            $('<div>', { class: "form-check" }).append(
-                $('<input>', { class: "form-check-input", type: "checkbox", id: `${city}Checkbox`, checked: editableProduct.delivery[country][city] }),
-                $('<label>', { class: "form-check-label", for: `${city}Checkbox` }).text(city.replace(/([A-Z])/g, ' $1').replace(/^./, (s) => s.toUpperCase())),
-            ).appendTo(checkboxes);
+            $(checkboxes).append(
+                $('<div>', { class: "form-check" }).append(
+                    $('<input>', { class: "form-check-input", type: "checkbox", id: `${city}Checkbox`, checked: editableProduct.delivery[country][city] })
+                        .off()
+                        .on('change', function() {
+                            editableProduct.delivery[country][city] = $(this).prop('checked');
+                        }),
+                    $('<label>', { class: "form-check-label", for: `${city}Checkbox` }).text(city.replace(/([A-Z])/g, ' $1').replace(/^./, (s) => s.toUpperCase())),
+                ),
+            )
         });
+        // Селект и деселект всех городов
         $('#selectAllCheckbox').prop('checked', false);
+        $('#selectAllCheckbox').off().on('change', () => {
+            $('#citiesCheckboxes input').each((i, checkbox) => {
+                $(checkbox).prop('checked', $('#selectAllCheckbox').prop('checked'));
+                editableProduct.delivery[country] = _.mapValues(editableProduct.delivery[country], () => $('#selectAllCheckbox').prop('checked'));
+            });
+        });
     };
 
     // Отрисовка ошибок валидации
@@ -343,7 +356,7 @@ class App {
         $('#editModal').show();
         // Находим изменяемый товар
         // Если его нет, значит это будет новый товар
-        const editableProduct = product.id ? product : this.nullProduct;
+        const editableProduct = product.id ? product : _.clone(this.nullProduct);
         // Заполняем поля формы
         $('#editingProductName').text(editableProduct.name);
         $('#inputProductName').val(editableProduct.name);
@@ -351,18 +364,14 @@ class App {
         $('#inputProductCount').val(editableProduct.count);
         $('#inputProductPrice').val(editableProduct.price.toLocaleString('en-US', { style: 'currency', currency: 'USD' }));
         // Удаляем старую и навешиваем новую подписку на событие
-        $('#saveEditButton').unbind().click({ toggleSave: 'YES', editableProduct }, this.editProduct);
-        $('#cancelEditButton').unbind().click({ toggleSave: 'NO' }, this.editProduct);
+        $('#saveEditButton').off().on('click', { toggleSave: 'YES', editableProduct }, this.editProduct);
+        $('#cancelEditButton').off().on('click', { toggleSave: 'NO' }, this.editProduct);
         // Чистим и заполняем список стран. При изменении селекта отрисовываем соответствующие города
         $('#countrySelect').empty().off().append(
             $('<option>', { value: 'russia' }).text('Russia'),
             $('<option>', { value: 'belarus' }).text('Belarus'),
             $('<option>', { value: 'usa' }).text('USA'),
         ).on('change', { editableProduct }, this.renderCities);
-        // Селект и деселект всех городов
-        $('#selectAllCheckbox').unbind().change(() => {
-            $('#citiesCheckboxes input').each((i, checkbox) => $(checkbox).prop('checked', $('#selectAllCheckbox').prop('checked')))
-        });
         // Отрисовываем города для селекта по умолчанию
         this.renderCities( { data: { editableProduct } }, $('#countrySelect').val() );
     };
