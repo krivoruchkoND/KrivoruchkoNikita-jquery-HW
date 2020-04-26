@@ -14,11 +14,8 @@ class App {
             binVersion: 'latest',
             key: '$2b$10$ltjATMhqY0JfYN5Mi1k1nOVTEQIGJwabv1R6Fb9CUjOUl7jTe6PwG',
         };
-        // Входные данные
+        // Входные данные - строго контролировать нужно только количество и цену
         this.inputs = {
-            search: '',
-            name: '',
-            email: '',
             count: '',
             price: '',
         };
@@ -203,7 +200,10 @@ class App {
             editableProduct.name = $('#inputProductName').val();
             editableProduct.email = $('#inputProductEmail').val();
             editableProduct.count = Number($('#inputProductCount').val());
-            editableProduct.price = Number($('#inputProductPrice').val().match(/[0-9.]/gm).join(''));          
+            editableProduct.price = Number($('#inputProductPrice').val().match(/[0-9.]/gm).join(''));
+            
+            // TO DO Перенести в данную функцию сбор данныех с чекбоксов. Это должно происходить только при сохранении продукта, не при его редактировании
+
             // Если новый продукт, то добавляем в массив товаров
             if (editableProduct.id === null) {
                 // Будет пересечение id, но в коде никогда не происходит выборки по id. Скорее всего, уникальный id должн назначать сервер
@@ -319,6 +319,9 @@ class App {
         const cities = editableProduct.delivery[country];
         const checkboxes = $('#citiesCheckboxes').empty();
         // Рисуем для каждого города чекбокс с подписью и подписываем его на событие
+
+        // TO DO Выяснить, почему при работе с новый объектом данные с чекбоксов записываются и в nullProduct, а не только в его клон
+
         _.keys(cities).forEach((city) => {
             $(checkboxes).append(
                 $('<div>', { class: "form-check" }).append(
@@ -354,6 +357,9 @@ class App {
         // Показываем модальное окно и бекдроп
         $('#backdrop').show();
         $('#editModal').show();
+
+        // TO DO Добавить сброс классов valid и invalid
+
         // Находим изменяемый товар
         // Если его нет, значит это будет новый товар
         const editableProduct = product.id ? product : _.clone(this.nullProduct);
