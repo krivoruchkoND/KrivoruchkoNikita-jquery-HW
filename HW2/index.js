@@ -11,7 +11,7 @@ class App {
         this.JSONBin = {
             root: 'https://api.jsonbin.io',
             binId: '5e962adc5fa47104cea07c45',
-            binVersion: 'latest',
+            binVersion: '21',  // На всякий случай по умолчанию всегда загружается заведомо правильный JSON
             key: '$2b$10$ltjATMhqY0JfYN5Mi1k1nOVTEQIGJwabv1R6Fb9CUjOUl7jTe6PwG',
         };
         // Входные данные - строго контролировать нужно только количество и цену
@@ -79,6 +79,7 @@ class App {
         // Если пришел ответ, то отрисовываем приложение
         .then(() => {
             this.render();
+            this.JSONBin.binVersion = 'latest'; // Смена версии JSON, для подгрузки новых данных
         })
         .catch(() => {
             alert('Error while render');
